@@ -7,8 +7,8 @@ const subscriptions = new Map();
 function sleep(milliseconds) {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
-let StreamKey = null;
-let connection = null;
+let Stream = "maitake";
+let Number = "0"
 let url = null;
 
 client.on('ready', () => {
@@ -20,7 +20,7 @@ client.on('ready', () => {
 client.on('interactionCreate', async (interaction) => {
     if (!interaction.isCommand() || !interaction.guildId) return;
     let subscription = subscriptions.get(interaction.guildId);
-    if (interaction.commandName === "play") {
+    if (interaction.commandName === "play" + Number) {
         await interaction.deferReply();
         const guild = interaction.guild;
         const member = await guild.members.fetch(interaction.member.id);
@@ -54,7 +54,7 @@ client.on('interactionCreate', async (interaction) => {
             });
         };
         // Extract the stream URL from the command
-        StreamKey = interaction.options.get('streamkey').value;
+        StreamKey = Stream + Number;
         url = "rtsp://topaz.chat/live/" + StreamKey;
         const resource = createAudioResource(url,
             {
@@ -121,6 +121,7 @@ client.on('interactionCreate', async (interaction) => {
     return {
         connection: connection,
         StreamKey: StreamKey,
+        Number: Number,
         url: url,
     };
 })
@@ -130,7 +131,7 @@ client.on('interactionCreate', async (interaction) => {
     if (!interaction.isCommand() || !interaction.guildId) return;
     let connection = null;
     let subscription = subscriptions.get(interaction.guildId);
-    if (interaction.commandName === "resync") {
+    if (interaction.commandName === "resync" + Number) {
         await interaction.deferReply();
         const guild = interaction.guild;
         const member = await guild.members.fetch(interaction.member.id);
@@ -234,7 +235,7 @@ client.on('interactionCreate', async (interaction) => {
 client.on('interactionCreate', async (interaction) => {
     if (!interaction.isCommand() || !interaction.guildId) return;
     let subscription = subscriptions.get(interaction.guildId);
-    if (interaction.commandName === "stop") {
+    if (interaction.commandName === "stop" + Number) {
         await interaction.deferReply();
         const player = createAudioPlayer({
             behaviors: {
